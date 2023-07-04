@@ -11,12 +11,17 @@
 
 1. NTLM uses RC4 and should be removed as well. Monitoring the usage of NTLM is recommended and plan to restrict it arroding to [Network security: Restrict NTLM: Audit NTLM authentication in this domain](https://learn.microsoft.com/en-us/windows/security/threat-protection/security-policy-settings/network-security-restrict-ntlm-audit-ntlm-authentication-in-this-domain)
 
+1. There are old DNS SRV records of domain controllers decommisioned years ago. Are there processes cleaning up DNS on a regular basis?
+
 ## Useful tools and links
 
 - [AutomatedLab](https://automatedlab.org/en/latest/)
 - [VSCode](https://code.visualstudio.com/download)
 - [Git](https://git-scm.com/downloads)
 - [regex101: build, test, and debug regex](https://regex101.com/)
+- [GitLense](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens)
+- [Microsoft Active Directory Topology Diagrammer](http://web.archive.org/web/20200802184044/https://www.microsoft.com/en-us/download/confirmation.aspx?id=13380) (This tool is no longer offically available, archive.org has made a copy)
+- [draw.io](https://www.drawio.com/) as a replacement for Microsoft Visio.
 
 ## Notes
 
@@ -40,4 +45,21 @@
         Get-ADDomainController -Identity $dc -Server $domain.DNSRoot
         }
     } 
+    ```
+
+- Get a list of all AD replication site links with the site count and site name:
+
+    ```powershell
+    Get-ADReplicationSiteLink -Filter * | 
+        Format-Table -Property Name , Cost, ReplicationFrequencyInMinutes, 
+        @{ Name = 'SiteCount'; Expression = { 
+                $_.SitesIncluded.Count } 
+        }, 
+        @{ Name = 'SitesIncluded'; Expression = { 
+                $_.SitesIncluded | ForEach-Object { 
+            ($_ -split ',')[0] | 
+                        ForEach-Object {
+                            $_.Substring(3)
+                        } } } 
+            }
     ```
