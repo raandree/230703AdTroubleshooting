@@ -16,3 +16,28 @@
 - [AutomatedLab](https://automatedlab.org/en/latest/)
 - [VSCode](https://code.visualstudio.com/download)
 - [Git](https://git-scm.com/downloads)
+- [regex101: build, test, and debug regex](https://regex101.com/)
+
+## Notes
+
+- PowerShell is object oriented where as the cmd shell is text based. Retrieving the IP addresses from `ipconfig.exe` (text) is far more difficult that getting it from the result of a cmdlet (object)
+
+    ```powershell
+    ipconfig.exe | ForEach-Object { if ($_ -match 'IPv4 Address([\. :]+)(?<IpAddress>[\d\.]+)') { $Matches.IpAddress } }
+
+    (Get-NetIPAddress).IPAddress
+    ```
+
+- Get all domain controllers within the current forest:
+
+    ```powershell
+    $f = Get-ADForest
+    $dcs = foreach ($domain in $f.Domains)
+    {
+        $domain = Get-ADDomain -Identity $domain
+        foreach ($dc in $domain.ReplicaDirectoryServers)
+        {
+        Get-ADDomainController -Identity $dc -Server $domain.DNSRoot
+        }
+    } 
+    ```
