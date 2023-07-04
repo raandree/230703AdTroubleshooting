@@ -13,7 +13,12 @@
 
 1. There are old DNS SRV records of domain controllers decommisioned years ago. Are there processes cleaning up DNS on a regular basis? Windows DNS Servers have `DNS Scavening` for cleanip up orphaned records.
 
-1. Maybe get rid of secondary zones and replicate the AD integrated zones to the entire forest
+1. Maybe get rid of secondary zones and replicate the AD integrated zones to the entire forest.
+
+1. How does the non-Microsoft DNS server system make sure, that dynamic updates are always secure? We did not find any traces of Kerberos authentication to the DNS servers.
+
+
+
 
 EnableForwarderReordering
 
@@ -135,4 +140,13 @@ EnableForwarderReordering
 
     #to view all tickets
     $sessionsTickets.Tickets 
+    ```
+
+- Display the version, last change time and ogininating domain controller of all attributes of an object
+
+    ```powershell
+    $o = Get-ADObject -IncludeDeletedObjects -Filter 'SamAccountName -eq "g1"'
+
+    Get-ADReplicationAttributeMetadata -Object $o -Properties * -Server f1dc1 -IncludeDeletedObjects |
+    Format-Table -Property AttributeName, Version, LastOriginatingChangeTime, LastOriginatingChangeDirectoryServerIdentity
     ```
