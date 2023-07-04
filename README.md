@@ -11,7 +11,11 @@
 
 1. NTLM uses RC4 and should be removed as well. Monitoring the usage of NTLM is recommended and plan to restrict it arroding to [Network security: Restrict NTLM: Audit NTLM authentication in this domain](https://learn.microsoft.com/en-us/windows/security/threat-protection/security-policy-settings/network-security-restrict-ntlm-audit-ntlm-authentication-in-this-domain)
 
-1. There are old DNS SRV records of domain controllers decommisioned years ago. Are there processes cleaning up DNS on a regular basis?
+1. There are old DNS SRV records of domain controllers decommisioned years ago. Are there processes cleaning up DNS on a regular basis? Windows DNS Servers have `DNS Scavening` for cleanip up orphaned records.
+
+1. Maybe get rid of secondary zones and replicate the AD integrated zones to the entire forest
+
+EnableForwarderReordering
 
 ## Useful tools and links
 
@@ -62,4 +66,40 @@
                             $_.Substring(3)
                         } } } 
             }
+    ```
+
+- Replicate all domain controllers (push and pull)
+
+    ```cmd
+    REPADMIN /viewlist * > DCs.txt
+
+    FOR /F "tokens=3" %%a IN (DCs.txt) DO CALL REPADMIN /SyncAll /AeP %%a
+
+    DEL DCs.txt
+
+    REPADMIN /ReplSum
+    ```
+
+- Get all DNS Server scavening setting
+
+    ```powershell
+    $f = Get-ADForest
+    $dcs = foreach ($domain in $f.Domains)
+    {
+        $domain = Get-ADDomain -Identity $domain
+        foreach ($dc in $domain.ReplicaDirectoryServers)
+        {
+        Get-ADDomainController -Identity $dc -Server $domain.DNSRoot
+        }
+    }
+
+    $dnsServers = Invoke-Command -ComputerName $dcs.HostName -ScriptBlock { Get-DnsServer }
+
+    $dnsServers | Format-Table -Property PSComputerName, @{ Name = 'ScavengingInterval'; Expression = { $_.ServerScavenging.ScavengingInterval } }
+    ```
+
+- Get all DNS Server Zones and aging settings
+
+    ```powershell
+    Get-DnsServerZone | Get-DnsServerZoneAging | Format-Table -Property *
     ```
