@@ -21,7 +21,7 @@
 
 1. How does the non-Microsoft DNS server system make sure, that dynamic updates are always secure? We did not find any traces of Kerberos authentication to the DNS servers.
 
-
+2. There are numerous accounts with Kerberos unconstained delegation activated. This should be switched to contained delegation. 
 
 
 EnableForwarderReordering
@@ -34,8 +34,9 @@ EnableForwarderReordering
 - [regex101: build, test, and debug regex](https://regex101.com/)
 - [GitLense](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens)
 - [Microsoft Active Directory Topology Diagrammer](http://web.archive.org/web/20200802184044/https://www.microsoft.com/en-us/download/confirmation.aspx?id=13380) (This tool is no longer offically available, archive.org has made a copy)
-- [draw.io](https://www.drawio.com/) as a replacement for Microsoft Visio.
-- [NTFSSecurity PowerShell Module](https://www.powershellgallery.com/packages/NTFSSecurity/4.2.6) for managing NTFS permissions in a comfortable and effective way in PowerShell.
+- [draw.io](https://www.drawio.com/) as a replacement for Microsoft Visio
+- [NTFSSecurity PowerShell Module](https://www.powershellgallery.com/packages/NTFSSecurity/4.2.6) for managing NTFS permissions in a comfortable and effective way in PowerShell
+- [Kerberos 101 Workshop](https://github.com/raandree/Kerberos101)
 
 ## Notes
 
@@ -167,3 +168,15 @@ EnableForwarderReordering
     $si = New-Object System.Security.Principal.SecurityIdentifier('S-1-5-21-2033787110-292873494-3235488292-3509')
     $si.Translate([System.Security.Principal.NTAccount])
     ```
+
+- Get the group count of all the first 500 user accounts:
+
+```powershell
+$users = Get-ADUser -Filter * -ResultSetSize 500 | ForEach-Object {
+    $_ | Add-Member -MemberType ScriptProperty -Name GroupCount -Value {
+        ($this | Get-ADAccountAuthorizationGroup).Count
+    } -PassThru -Force
+}
+
+$users | Format-Table -Property Name, GroupCount
+```
