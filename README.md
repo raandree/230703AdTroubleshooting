@@ -1,5 +1,9 @@
 # Notes during AD Troubleshooting Workshop
 
+## Open Topics
+
+- Pester 
+
 ## Todos
 
 1. RC4 deadline?
@@ -31,6 +35,7 @@ EnableForwarderReordering
 - [GitLense](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens)
 - [Microsoft Active Directory Topology Diagrammer](http://web.archive.org/web/20200802184044/https://www.microsoft.com/en-us/download/confirmation.aspx?id=13380) (This tool is no longer offically available, archive.org has made a copy)
 - [draw.io](https://www.drawio.com/) as a replacement for Microsoft Visio.
+- [NTFSSecurity PowerShell Module](https://www.powershellgallery.com/packages/NTFSSecurity/4.2.6) for managing NTFS permissions in a comfortable and effective way in PowerShell.
 
 ## Notes
 
@@ -149,4 +154,16 @@ EnableForwarderReordering
 
     Get-ADReplicationAttributeMetadata -Object $o -Properties * -Server f1dc1 -IncludeDeletedObjects |
     Format-Table -Property AttributeName, Version, LastOriginatingChangeTime, LastOriginatingChangeDirectoryServerIdentity
+    ```
+
+- Get the local group membership translates from SID to name
+
+    ```
+    $wi = [System.Security.Principal.WindowsIdentity]::GetCurrent()
+    $wi.Groups | ForEach-Object {
+        $_.Translate([System.Security.Principal.NTAccount])
+    }
+
+    $si = New-Object System.Security.Principal.SecurityIdentifier('S-1-5-21-2033787110-292873494-3235488292-3509')
+    $si.Translate([System.Security.Principal.NTAccount])
     ```
