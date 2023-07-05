@@ -159,7 +159,7 @@ EnableForwarderReordering
 
 - Get the local group membership translates from SID to name
 
-    ```
+    ```powershell
     $wi = [System.Security.Principal.WindowsIdentity]::GetCurrent()
     $wi.Groups | ForEach-Object {
         $_.Translate([System.Security.Principal.NTAccount])
@@ -171,12 +171,12 @@ EnableForwarderReordering
 
 - Get the group count of all the first 500 user accounts:
 
-```powershell
-$users = Get-ADUser -Filter * -ResultSetSize 500 | ForEach-Object {
-    $_ | Add-Member -MemberType ScriptProperty -Name GroupCount -Value {
-        ($this | Get-ADAccountAuthorizationGroup).Count
-    } -PassThru -Force
-}
+    ```powershell
+    $users = Get-ADUser -Filter * -ResultSetSize 500 | ForEach-Object {
+        $_ | Add-Member -MemberType ScriptProperty -Name GroupCount -Value {
+            ($this | Get-ADAccountAuthorizationGroup).Count
+        } -PassThru -Force
+    }
 
-$users | Format-Table -Property Name, GroupCount
-```
+    $users | Format-Table -Property Name, GroupCount
+    ```
