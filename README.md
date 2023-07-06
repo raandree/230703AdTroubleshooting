@@ -48,6 +48,7 @@ EnableForwarderReordering
 ## Useful tools and links
 
 - [AutomatedLab](https://automatedlab.org/en/latest/)
+- [AutomatedLab.Common](https://www.powershellgallery.com/packages/AutomatedLab.Common/2.3.17) - Generic library with useful functions
 - [VSCode](https://code.visualstudio.com/download)
 - [Git](https://git-scm.com/downloads)
 - [regex101: build, test, and debug regex](https://regex101.com/)
@@ -200,4 +201,22 @@ EnableForwarderReordering
     }
 
     $users | Format-Table -Property Name, GroupCount
+    ```
+
+- Install software on a remote machine with PowerShell
+
+    ```powershell
+    #Install-LabSoftwarePackage -Path D:\LabSources\SoftwarePackages\npp.8.5.1.Installer.x64.exe -CommandLine /S -ComputerName DSCDC01
+
+    $cred = [pscredential]::new('contoso\install', ('Somepass1' | ConvertTo-SecureString -AsPlainText -Force))
+    $s = New-PSSession -ComputerName DSCDC01 -Credential $cred
+    Copy-Item -Path D:\LabSources\SoftwarePackages\npp.8.5.1.Installer.x64.exe -Destination C:\ -ToSession $s
+
+    $fi = Get-Command -Name Add-FunctionToPSSession
+    Add-FunctionToPSSession -Session $s -FunctionInfo $fi
+
+    Invoke-Command -Session $s -ScriptBlock {
+        #The function 'Install-SoftwarePackage' is defined in the 'AutomatedLab.Common' module
+        Install-SoftwarePackage -Path C:\npp.8.5.1.Installer.x64.exe -CommandLine /S -
+    }
     ```
