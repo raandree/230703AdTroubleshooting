@@ -21,7 +21,26 @@
 
 1. How does the non-Microsoft DNS server system make sure, that dynamic updates are always secure? We did not find any traces of Kerberos authentication to the DNS servers.
 
-2. There are numerous accounts with Kerberos unconstained delegation activated. This should be switched to contained delegation. 
+1. There are numerous accounts with Kerberos unconstained delegation activated. This should be switched to contained delegation.
+
+1. Configuring preferred bridgeheard servers is not required and makes the configuration more complex. Especially defining only one preferred bridgehead server is not recommended.
+
+1. Sitelink costs are different for unknown reason. The sitelink cost seems to not follow a strict rule.
+
+1. Some sitelinks connect only one site, others more than 2. This should be cleaned up.
+
+1. Consider enabling change notification on site links to eliminate replication delays ([Change Notifications in Active Directory Domain Services](https://learn.microsoft.com/en-us/windows/win32/ad/change-notifications-in-active-directory-domain-services)).
+
+1. There is no dedicated monitoring pack deployed in Nagios to monitor the ADDS specific events and disgnostic data. Something simiar like the [Microsoft System Center Management Pack for ADDS](https://www.microsoft.com/en-us/download/details.aspx?id=54525) is recommended. The following exvent IDs should be monitored:
+
+   - 1311
+   - 1789
+   - 1865
+   - 1925
+   - 1308
+   - 1566
+   - 1567
+   - 1864
 
 
 EnableForwarderReordering
@@ -37,7 +56,9 @@ EnableForwarderReordering
 - [draw.io](https://www.drawio.com/) as a replacement for Microsoft Visio
 - [NTFSSecurity PowerShell Module](https://www.powershellgallery.com/packages/NTFSSecurity/4.2.6) for managing NTFS permissions in a comfortable and effective way in PowerShell
 - [Kerberos 101 Workshop](https://github.com/raandree/Kerberos101)
-
+- [How to find expensive, inefficient and long running LDAP queries in Active Directory](https://techcommunity.microsoft.com/t5/core-infrastructure-and-security/how-to-find-expensive-inefficient-and-long-running-ldap-queries/ba-p/257859)
+- [Prevent Branch Office Domain Controllers from registering generic DNS Records and Netmask Ordering](https://blog.matrixpost.net/prevent-branch-office-domain-controller-from-registering-generic-dns-records-and-netmask-ordering/
+  )
 ## Notes
 
 - PowerShell is object oriented where as the cmd shell is text based. Retrieving the IP addresses from `ipconfig.exe` (text) is far more difficult that getting it from the result of a cmdlet (object)
