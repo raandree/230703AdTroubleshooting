@@ -47,8 +47,10 @@ EnableForwarderReordering
 
 ## Useful tools and links
 
-- [AutomatedLab](https://automatedlab.org/en/latest/)
+- [**AutomatedLab**](https://automatedlab.org/en/latest/)
 - [AutomatedLab.Common](https://www.powershellgallery.com/packages/AutomatedLab.Common/2.3.17) - Generic library with useful functions
+- [**Introduction to PowerShell Functions and Modules**](https://github.com/raandree/PowerShellTraining)
+- [**PowerShell Module Generation Blueprint**](https://github.com/gaelcolas/Sampler)
 - [VSCode](https://code.visualstudio.com/download)
 - [Git](https://git-scm.com/downloads)
 - [regex101: build, test, and debug regex](https://regex101.com/)
@@ -58,8 +60,9 @@ EnableForwarderReordering
 - [NTFSSecurity PowerShell Module](https://www.powershellgallery.com/packages/NTFSSecurity/4.2.6) for managing NTFS permissions in a comfortable and effective way in PowerShell
 - [Kerberos 101 Workshop](https://github.com/raandree/Kerberos101)
 - [How to find expensive, inefficient and long running LDAP queries in Active Directory](https://techcommunity.microsoft.com/t5/core-infrastructure-and-security/how-to-find-expensive-inefficient-and-long-running-ldap-queries/ba-p/257859)
-- [Prevent Branch Office Domain Controllers from registering generic DNS Records and Netmask Ordering](https://blog.matrixpost.net/prevent-branch-office-domain-controller-from-registering-generic-dns-records-and-netmask-ordering/
-  )
+- [Prevent Branch Office Domain Controllers from registering generic DNS Records and Netmask Ordering](https://blog.matrixpost.net/prevent-branch-office-domain-controller-from-registering-generic-dns-records-and-netmask-ordering/)
+- [PowerShell Practice and Style](https://github.com/PoshCode/PowerShellPracticeAndStyle/blob/d1c6ae146b1060ec4844afc393161c6237bd85a7/Style-Guide/Code-Layout-and-Formatting.md)
+- [PSScriptAnalyzer](https://github.com/PowerShell/PSScriptAnalyzer)
 ## Notes
 
 - PowerShell is object oriented where as the cmd shell is text based. Retrieving the IP addresses from `ipconfig.exe` (text) is far more difficult that getting it from the result of a cmdlet (object)
